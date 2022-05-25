@@ -10,5 +10,5 @@ import java.io.Serializable;
 @Setter
 @ToString
 public class BaseDto implements Serializable {
-    private Long id;
+    private Integer id;
 }
