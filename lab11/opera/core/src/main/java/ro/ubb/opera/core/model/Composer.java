@@ -16,6 +16,9 @@ public class Composer extends BaseEntity<Integer> {
         this.musicalPeriod = musicalPeriod;
     }
 
+    public Composer() {
+    }
+
     public String getName() {
         return name;
     }

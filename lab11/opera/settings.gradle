@@ -1,6 +1,6 @@
 rootProject.name = 'opera'
-include 'common'
-include 'server'
-include 'client'
+//include 'server'
+//include 'client'
 include 'core'
+include 'web'
 

@@ -1,13 +1,14 @@
 package ro.ubb.opera.core.service;
 
-import ro.ubb.opera.common.domain.Venue;
-import ro.ubb.opera.common.service.exceptions.ServiceException;
+
+import ro.ubb.opera.core.model.Venue;
+import ro.ubb.opera.core.service.exceptions.ServiceException;
 
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.Future;
 
-public interface VenueService extends Service {
+public interface VenueService extends IService {
     String ADD_VENUE = "addVenue";
 
     String FIND_VENUE_BY_ID = "findVenueById";
@@ -40,11 +41,11 @@ public interface VenueService extends Service {
         if (venue == null) {
             return "";
         }
-        return venue.getId().toString() + Service.TOKENS_DELIMITER + venue.getNumberOfSeats().toString() + Service.TOKENS_DELIMITER + venue.getFloor().toString();
+        return venue.getId().toString() + IService.TOKENS_DELIMITER + venue.getNumberOfSeats().toString() + IService.TOKENS_DELIMITER + venue.getFloor().toString();
     }
 
     static Venue decodeVenue(String encodedVenue) {
-        StringTokenizer stringTokenizer = new StringTokenizer(encodedVenue, Service.TOKENS_DELIMITER);
+        StringTokenizer stringTokenizer = new StringTokenizer(encodedVenue, IService.TOKENS_DELIMITER);
         if (stringTokenizer.countTokens() != 3) {
             throw new ServiceException("error in decoding an entity");
         }

@@ -1,11 +1,13 @@
 package ro.ubb.opera.core.repository;
 
-import ro.ubb.opera.common.domain.BaseEntity;
-import ro.ubb.opera.common.domain.exceptions.ValidatorException;
+import org.springframework.data.repository.NoRepositoryBean;
+import ro.ubb.opera.core.model.BaseEntity;
+import ro.ubb.opera.core.model.exceptions.ValidatorException;
 
 import java.io.Serializable;
 import java.util.Optional;
 
+@NoRepositoryBean
 public interface Repository<ID extends Serializable, T extends BaseEntity<ID>> {
     Optional<T> findOne(ID id);
 

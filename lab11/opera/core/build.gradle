@@ -1,19 +1,17 @@
-plugins {
-    id 'java'
-}
-
-group 'ro.ubb'
-version '1.0-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-}
 
-test {
-    useJUnitPlatform()
+    //jpa
+    compile group: 'org.springframework', name: 'spring-context-support', version: "$springVersion"
+    compile group: 'org.springframework', name: 'spring-orm', version: "$springVersion"
+    compile group: 'org.springframework.data', name: 'spring-data-jpa', version: "$springDataVersion"
+
+    compile group: 'org.hibernate', name: 'hibernate-core', version:"$hibernateVersion"
+
+    compile group: 'org.postgresql', name: 'postgresql', version: "$postgresqlVersion"
+
+    compile group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: "$caffeineVersion"
+    compile group: 'com.zaxxer', name: 'HikariCP', version: "$hikariVersion"
+
+    compile group: 'javax.xml.bind', name: 'jaxb-api', version: "$jaxbapiVersion"
 }

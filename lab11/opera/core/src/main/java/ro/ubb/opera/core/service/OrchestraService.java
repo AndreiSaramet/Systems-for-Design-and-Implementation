@@ -1,13 +1,14 @@
 package ro.ubb.opera.core.service;
 
-import ro.ubb.opera.common.domain.Orchestra;
-import ro.ubb.opera.common.service.exceptions.ServiceException;
+
+import ro.ubb.opera.core.model.Orchestra;
+import ro.ubb.opera.core.service.exceptions.ServiceException;
 
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.Future;
 
-public interface OrchestraService extends Service {
+public interface OrchestraService extends IService {
     String ADD_ORCHESTRA = "addOrchestra";
 
     String FIND_ORCHESTRA_BY_ID = "findOrchestraById";
@@ -40,11 +41,11 @@ public interface OrchestraService extends Service {
         if (orchestra == null) {
             return "";
         }
-        return orchestra.getId().toString() + Service.TOKENS_DELIMITER + orchestra.getName() + Service.TOKENS_DELIMITER + orchestra.getConductor();
+        return orchestra.getId().toString() + IService.TOKENS_DELIMITER + orchestra.getName() + IService.TOKENS_DELIMITER + orchestra.getConductor();
     }
 
     static Orchestra decodeOrchestra(String encodedOrchestra) {
-        StringTokenizer stringTokenizer = new StringTokenizer(encodedOrchestra, Service.TOKENS_DELIMITER);
+        StringTokenizer stringTokenizer = new StringTokenizer(encodedOrchestra, IService.TOKENS_DELIMITER);
         if (stringTokenizer.countTokens() != 3) {
             throw new ServiceException("error in decoding an entity");
         }

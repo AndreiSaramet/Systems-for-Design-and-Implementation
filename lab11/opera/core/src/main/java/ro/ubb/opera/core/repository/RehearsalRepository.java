@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import ro.ubb.opera.common.domain.Rehearsal;
-import ro.ubb.opera.common.domain.exceptions.ValidatorException;
+import ro.ubb.opera.core.model.Rehearsal;
+import ro.ubb.opera.core.model.exceptions.ValidatorException;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;

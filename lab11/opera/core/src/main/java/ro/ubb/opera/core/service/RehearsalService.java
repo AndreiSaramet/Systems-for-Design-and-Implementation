@@ -1,13 +1,14 @@
 package ro.ubb.opera.core.service;
 
-import ro.ubb.opera.common.domain.Rehearsal;
-import ro.ubb.opera.common.service.exceptions.ServiceException;
+
+import ro.ubb.opera.core.model.Rehearsal;
+import ro.ubb.opera.core.service.exceptions.ServiceException;
 
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.Future;
 
-public interface RehearsalService extends Service {
+public interface RehearsalService extends IService {
     String ADD_REHEARSAL = "addRehearsal";
 
     String FIND_REHEARSAL_BY_ID = "findRehearsalById";
@@ -40,11 +41,11 @@ public interface RehearsalService extends Service {
         if (rehearsal == null) {
             return "";
         }
-        return rehearsal.getId().toString() + Service.TOKENS_DELIMITER + rehearsal.getOrchestraId().toString() + Service.TOKENS_DELIMITER + rehearsal.getVenueId().toString();
+        return rehearsal.getId().toString() + IService.TOKENS_DELIMITER + rehearsal.getOrchestraId().toString() + IService.TOKENS_DELIMITER + rehearsal.getVenueId().toString();
     }
 
     static Rehearsal decodeRehearsal(String encodedRehearsal) {
-        StringTokenizer stringTokenizer = new StringTokenizer(encodedRehearsal, Service.TOKENS_DELIMITER);
+        StringTokenizer stringTokenizer = new StringTokenizer(encodedRehearsal, IService.TOKENS_DELIMITER);
         if (stringTokenizer.countTokens() != 3) {
             throw new ServiceException("error in decoding an opera");
         }

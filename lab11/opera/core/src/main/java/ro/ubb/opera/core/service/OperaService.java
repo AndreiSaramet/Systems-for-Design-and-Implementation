@@ -1,13 +1,13 @@
 package ro.ubb.opera.core.service;
 
-import ro.ubb.opera.common.domain.Opera;
-import ro.ubb.opera.common.service.exceptions.ServiceException;
+import ro.ubb.opera.core.model.Opera;
+import ro.ubb.opera.core.service.exceptions.ServiceException;
 
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.Future;
 
-public interface OperaService extends Service {
+public interface OperaService extends IService {
     String ADD_OPERA = "addOpera";
 
     String FIND_OPERA_BY_ID = "findOperaById";
@@ -44,11 +44,11 @@ public interface OperaService extends Service {
         if (opera == null) {
             return "";
         }
-        return opera.getId().toString() + Service.TOKENS_DELIMITER + opera.getTitle() + Service.TOKENS_DELIMITER + opera.getLanguage() + Service.TOKENS_DELIMITER + opera.getComposerId().toString();
+        return opera.getId().toString() + IService.TOKENS_DELIMITER + opera.getTitle() + IService.TOKENS_DELIMITER + opera.getLanguage() + IService.TOKENS_DELIMITER + opera.getComposerId().toString();
     }
 
     static Opera decodeOpera(String encodedOpera) {
-        StringTokenizer stringTokenizer = new StringTokenizer(encodedOpera, Service.TOKENS_DELIMITER);
+        StringTokenizer stringTokenizer = new StringTokenizer(encodedOpera, IService.TOKENS_DELIMITER);
         if (stringTokenizer.countTokens() != 4) {
             throw new ServiceException("error in decoding an opera");
         }

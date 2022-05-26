@@ -1,6 +1,6 @@
 package ro.ubb.opera.core.service;
 
-public interface Service {
+public interface IService {
     int PORT = 1234;
 
     String HOST = "localhost";

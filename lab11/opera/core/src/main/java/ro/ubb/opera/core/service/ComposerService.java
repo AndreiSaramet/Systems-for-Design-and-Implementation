@@ -1,13 +1,12 @@
 package ro.ubb.opera.core.service;
 
-import ro.ubb.opera.common.domain.Composer;
-import ro.ubb.opera.common.service.exceptions.ServiceException;
+import ro.ubb.opera.core.model.Composer;
+import ro.ubb.opera.core.service.exceptions.ServiceException;
 
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.concurrent.Future;
 
-public interface ComposerService extends Service {
+public interface ComposerService extends IService {
     String ADD_COMPOSER = "addComposer";
 
     String FIND_COMPOSER_BY_ID = "findComposerById";
@@ -24,31 +23,31 @@ public interface ComposerService extends Service {
 
     String DELETE_COMPOSER = "deleteComposer";
 
-    Future<Composer> addComposer(String name, String nationality, String musicalPeriod);
+    Composer addComposer(String name, String nationality, String musicalPeriod);
 
-    Future<Composer> findComposerById(Integer id);
+    Composer findComposerById(Integer id);
 
-    Future<Composer> findComposerByName(String name);
+    Composer findComposerByName(String name);
 
-    Future<Set<Composer>> findComposersByNationality(String nationality);
+    Set<Composer> findComposersByNationality(String nationality);
 
-    Future<Set<Composer>> findComposersByMusicalPeriod(String musicalPeriod);
+    Set<Composer> findComposersByMusicalPeriod(String musicalPeriod);
 
-    Future<Set<Composer>> getAllComposers();
+    Set<Composer> getAllComposers();
 
-    Future<Composer> updateComposer(Integer id, String name, String nationality, String musicalPeriod);
+    Composer updateComposer(Integer id, String name, String nationality, String musicalPeriod);
 
-    Future<Composer> deleteComposer(Integer id);
+    Composer deleteComposer(Integer id);
 
     static String encodeComposer(Composer composer) {
         if (composer == null) {
             return "";
         }
-        return composer.getId().toString() + Service.TOKENS_DELIMITER + composer.getName() + Service.TOKENS_DELIMITER + composer.getNationality() + Service.TOKENS_DELIMITER + composer.getMusicalPeriod();
+        return composer.getId().toString() + IService.TOKENS_DELIMITER + composer.getName() + IService.TOKENS_DELIMITER + composer.getNationality() + IService.TOKENS_DELIMITER + composer.getMusicalPeriod();
     }
 
     static Composer decodeComposer(String encodedComposer) {
-        StringTokenizer stringTokenizer = new StringTokenizer(encodedComposer, Service.TOKENS_DELIMITER);
+        StringTokenizer stringTokenizer = new StringTokenizer(encodedComposer, IService.TOKENS_DELIMITER);
         if (stringTokenizer.countTokens() != 4) {
             throw new ServiceException("error in decoding an entity");
         }

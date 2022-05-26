@@ -1,7 +1,7 @@
 package ro.ubb.opera.core.model.validators;
 
-import ro.ubb.opera.common.domain.Rehearsal;
-import ro.ubb.opera.common.domain.exceptions.ValidatorException;
+import ro.ubb.opera.core.model.Rehearsal;
+import ro.ubb.opera.core.model.exceptions.ValidatorException;
 
 public class RehearsalValidator implements Validator<Rehearsal> {
     @Override

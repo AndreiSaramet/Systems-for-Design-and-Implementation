@@ -1,9 +1,11 @@
 package ro.ubb.opera.web.converter;
 
+import org.springframework.stereotype.Component;
 import ro.ubb.opera.core.model.Composer;
 import ro.ubb.opera.web.dto.ComposerDto;
 import ro.ubb.opera.web.dto.ComposersDto;
 
+@Component
 public class ComposerConverter extends BaseConverter<Composer, ComposerDto> {
     @Override
     public Composer convertDtoToModel(ComposerDto dto) {

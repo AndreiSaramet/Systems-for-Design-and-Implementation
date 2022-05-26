@@ -1,9 +1,13 @@
 package ro.ubb.opera.core.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class BaseEntity<ID> {
+public class BaseEntity<ID extends Serializable> implements Serializable {
     private ID id;
+
+    public BaseEntity() {
+    }
 
     public BaseEntity(ID id) {
         this.id = id;
