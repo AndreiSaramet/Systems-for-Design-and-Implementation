@@ -1,11 +1,16 @@
 package ro.ubb.opera.core.model;
 
+import javax.persistence.Entity;
 import java.util.Objects;
 
+@Entity
 public class Rehearsal extends BaseEntity<Integer> {
     private Integer orchestraId;
 
     private Integer venueId;
+
+    public Rehearsal() {
+    }
 
     public Rehearsal(Integer integer, Integer orchestraId, Integer venueId) {
         super(integer);

@@ -1,11 +1,16 @@
 package ro.ubb.opera.core.model;
 
+import javax.persistence.Entity;
 import java.util.Objects;
 
+@Entity
 public class Orchestra extends BaseEntity<Integer> {
     private String name;
 
     private String conductor;
+
+    public Orchestra() {
+    }
 
     public Orchestra(Integer integer, String name, String conductor) {
         super(integer);

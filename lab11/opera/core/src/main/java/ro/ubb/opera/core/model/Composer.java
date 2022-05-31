@@ -1,7 +1,9 @@
 package ro.ubb.opera.core.model;
 
+import javax.persistence.Entity;
 import java.util.Objects;
 
+@Entity
 public class Composer extends BaseEntity<Integer> {
     private String name;
 
@@ -9,14 +11,14 @@ public class Composer extends BaseEntity<Integer> {
 
     private String musicalPeriod;
 
+    public Composer() {
+    }
+
     public Composer(Integer id, String name, String nationality, String musicalPeriod) {
         super(id);
         this.name = name;
         this.nationality = nationality;
         this.musicalPeriod = musicalPeriod;
-    }
-
-    public Composer() {
     }
 
     public String getName() {

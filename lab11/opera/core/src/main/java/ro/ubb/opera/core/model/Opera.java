@@ -1,13 +1,18 @@
 package ro.ubb.opera.core.model;
 
+import javax.persistence.Entity;
 import java.util.Objects;
 
+@Entity
 public class Opera extends BaseEntity<Integer> {
     private String title;
 
     private String language;
 
     private Integer composerId;
+
+    public Opera() {
+    }
 
     public Opera(Integer integer, String title, String language, Integer composerId) {
         super(integer);
