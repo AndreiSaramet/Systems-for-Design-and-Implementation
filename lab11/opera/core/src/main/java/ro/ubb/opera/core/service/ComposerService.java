@@ -1,10 +1,8 @@
 package ro.ubb.opera.core.service;
 
 import ro.ubb.opera.core.model.Composer;
-import ro.ubb.opera.core.service.exceptions.ServiceException;
 
 import java.util.Set;
-import java.util.StringTokenizer;
 
 public interface ComposerService extends Service {
     Composer addComposer(String name, String nationality, String musicalPeriod);

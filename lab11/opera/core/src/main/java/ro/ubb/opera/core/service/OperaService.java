@@ -1,61 +1,23 @@
 package ro.ubb.opera.core.service;
 
 import ro.ubb.opera.core.model.Opera;
-import ro.ubb.opera.core.service.exceptions.ServiceException;
 
 import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.concurrent.Future;
 
-public interface OperaService extends IService {
-    String ADD_OPERA = "addOpera";
+public interface OperaService extends Service {
+    Opera addOpera(String title, String language, Integer composerId);
 
-    String FIND_OPERA_BY_ID = "findOperaById";
+    Opera findOperaById(Integer id);
 
-    String FIND_OPERA_BY_TITLE = "findOperaByTitle";
+    Opera findOperaByTitle(String title);
 
-    String FIND_OPERAS_BY_LANGUAGE = "findOperasByLanguage";
+    Set<Opera> findOperasByLanguage(String language);
 
-    String FIND_OPERAS_BY_COMPOSER = "findOperasByComposer";
+    Set<Opera> findOperasByComposer(Integer composerId);
 
-    String GET_ALL_OPERA = "getAllOperas";
+    Set<Opera> getAllOperas();
 
-    String UPDATE_OPERA = "updateOpera";
+    Opera updateOpera(Integer id, String title, String language, Integer composerId);
 
-    String DELETE_OPERA = "deleteOpera";
-
-    Future<Opera> addOpera(String title, String language, Integer composerId);
-
-    Future<Opera> findOperaById(Integer id);
-
-    Future<Opera> findOperaByTitle(String title);
-
-    Future<Set<Opera>> findOperasByLanguage(String language);
-
-    Future<Set<Opera>> findOperasByComposer(Integer composerId);
-
-    Future<Set<Opera>> getAllOperas();
-
-    Future<Opera> updateOpera(Integer id, String title, String language, Integer composerId);
-
-    Future<Opera> deleteOpera(Integer id);
-
-    static String encodeOpera(Opera opera) {
-        if (opera == null) {
-            return "";
-        }
-        return opera.getId().toString() + IService.TOKENS_DELIMITER + opera.getTitle() + IService.TOKENS_DELIMITER + opera.getLanguage() + IService.TOKENS_DELIMITER + opera.getComposerId().toString();
-    }
-
-    static Opera decodeOpera(String encodedOpera) {
-        StringTokenizer stringTokenizer = new StringTokenizer(encodedOpera, IService.TOKENS_DELIMITER);
-        if (stringTokenizer.countTokens() != 4) {
-            throw new ServiceException("error in decoding an opera");
-        }
-        try {
-            return new Opera(Integer.parseInt(stringTokenizer.nextToken()), stringTokenizer.nextToken(), stringTokenizer.nextToken(), Integer.parseInt(stringTokenizer.nextToken()));
-        } catch (NumberFormatException e) {
-            throw new ServiceException(e);
-        }
-    }
+    Opera deleteOpera(Integer id);
 }
