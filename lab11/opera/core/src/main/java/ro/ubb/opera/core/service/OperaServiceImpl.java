@@ -1,95 +1,83 @@
 package ro.ubb.opera.core.service;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import ro.ubb.opera.core.model.Opera;
+import ro.ubb.opera.core.model.validators.OperaValidator;
 import ro.ubb.opera.core.model.validators.Validator;
 import ro.ubb.opera.core.repository.Repository;
 
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 public class OperaServiceImpl implements OperaService {
-    private final ExecutorService executorService;
-
     private final Validator<Opera> operaValidator;
 
+    @Autowired
     private final Repository<Integer, Opera> operaRepository;
 
-    public OperaServiceImpl(ExecutorService executorService, Validator<Opera> operaValidator, Repository<Integer, Opera> operaRepository) {
-        this.executorService = executorService;
-        this.operaValidator = operaValidator;
+    public OperaServiceImpl(Repository<Integer, Opera> operaRepository) {
+        this.operaValidator = new OperaValidator();
         this.operaRepository = operaRepository;
     }
 
     @Override
-    public Future<Opera> addOpera(String title, String language, Integer composerId) {
-        return this.executorService.submit(() -> {
-            Opera opera = new Opera(-1, title, language, composerId);
-            this.operaValidator.validate(opera);
-            return this.operaRepository.save(opera).orElse(null);
-        });
+    public Opera addOpera(String title, String language, Integer composerId) {
+        Opera opera = new Opera(-1, title, language, composerId);
+        this.operaValidator.validate(opera);
+        return this.operaRepository.save(opera);
     }
 
     @Override
-    public Future<Opera> findOperaById(Integer id) {
-        return this.executorService.submit(() -> this.operaRepository.findOne(id).orElse(null));
+    public Opera findOperaById(Integer id) {
+        return this.operaRepository.findById(id).orElse(null);
     }
 
     @Override
-    public Future<Opera> findOperaByTitle(String title) {
-        return this.executorService.submit(() -> {
-            Set<Opera> operaSet = new HashSet<>();
-            this.operaRepository.findAll().forEach(operaSet::add);
-            operaSet = operaSet.stream().filter(opera -> opera.getTitle().equals(title)).collect(Collectors.toSet());
-            if (operaSet.isEmpty()) {
-                return null;
-            }
-            return new ArrayList<>(operaSet).get(0);
-        });
+    public Opera findOperaByTitle(String title) {
+        List<Opera> operaSet = this.operaRepository.findAll().stream().filter(opera -> opera.getTitle().equals(title)).collect(Collectors.toList());
+        if (operaSet.isEmpty()) {
+            return null;
+        }
+        return operaSet.get(0);
     }
 
     @Override
-    public Future<Set<Opera>> findOperasByLanguage(String language) {
-        return this.executorService.submit(() -> {
-            Set<Opera> operaSet = new HashSet<>();
-            this.operaRepository.findAll().forEach(operaSet::add);
-            return operaSet.stream().filter(opera -> opera.getLanguage().equals(language)).collect(Collectors.toSet());
-        });
+    public Set<Opera> findOperasByLanguage(String language) {
+        return this.operaRepository.findAll().stream().filter(opera -> opera.getLanguage().equals(language)).collect(Collectors.toSet());
     }
 
     @Override
-    public Future<Set<Opera>> findOperasByComposer(Integer composerId) {
-        return this.executorService.submit(() -> {
-            Set<Opera> operaSet = new HashSet<>();
-            this.operaRepository.findAll().forEach(operaSet::add);
-            return operaSet.stream().filter(opera -> opera.getComposerId().equals(composerId)).collect(Collectors.toSet());
-        });
+    public Set<Opera> findOperasByComposer(Integer composerId) {
+        return this.operaRepository.findAll().stream().filter(opera -> opera.getComposerId().equals(composerId)).collect(Collectors.toSet());
     }
 
     @Override
-    public Future<Set<Opera>> getAllOperas() {
-        return this.executorService.submit(() -> {
-            Set<Opera> operaSet = new HashSet<>();
-            this.operaRepository.findAll().forEach(operaSet::add);
-            return operaSet;
-        });
+    public Set<Opera> getAllOperas() {
+        return new HashSet<>(this.operaRepository.findAll());
     }
 
     @Override
-    public Future<Opera> updateOpera(Integer id, String title, String language, Integer composerId) {
-        return this.executorService.submit(() -> {
-            Opera opera = new Opera(id, title, language, composerId);
-            this.operaValidator.validate(opera);
-            return this.operaRepository.update(opera).orElse(null);
-        });
+    @Transactional
+    public Opera updateOpera(Integer id, String title, String language, Integer composerId) {
+        Opera opera = this.operaRepository.findById(id).orElse(null);
+        if (opera == null) {
+            return null;
+        }
+        opera.setTitle(title);
+        opera.setLanguage(language);
+        opera.setComposerId(composerId);
+        this.operaValidator.validate(opera);
+        return opera;
     }
 
     @Override
-    public Future<Opera> deleteOpera(Integer id) {
-        return this.executorService.submit(() -> this.operaRepository.delete(id).orElse(null));
+    public Opera deleteOpera(Integer id) {
+        Opera opera = this.operaRepository.findById(id).orElse(null);
+        this.operaRepository.deleteById(id);
+        return opera;
     }
 }
