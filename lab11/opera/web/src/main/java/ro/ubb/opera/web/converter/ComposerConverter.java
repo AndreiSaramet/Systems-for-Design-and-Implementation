@@ -3,17 +3,16 @@ package ro.ubb.opera.web.converter;
 import org.springframework.stereotype.Component;
 import ro.ubb.opera.core.model.Composer;
 import ro.ubb.opera.web.dto.ComposerDto;
-import ro.ubb.opera.web.dto.ComposersDto;
 
 @Component
 public class ComposerConverter extends BaseConverter<Composer, ComposerDto> {
     @Override
-    public Composer convertDtoToModel(ComposerDto dto) {
+    public Composer convertDtoToModel(ComposerDto composerDto) {
         Composer composer = new Composer();
-        composer.setId(dto.getId());
-        composer.setName(dto.getName());
-        composer.setNationality(dto.getNationality());
-        composer.setMusicalPeriod(dto.getMusicalPeriod());
+        composer.setId(composerDto.getId());
+        composer.setName(composerDto.getName());
+        composer.setNationality(composerDto.getNationality());
+        composer.setMusicalPeriod(composerDto.getMusicalPeriod());
         return composer;
     }
 

@@ -11,19 +11,19 @@ public abstract class BaseConverter<Model extends BaseEntity<Integer>, Dto exten
         implements Converter<Model, Dto> {
     public Set<Integer> convertModelsToIDs(Set<Model> models) {
         return models.stream()
-                .map(model -> model.getId())
+                .map(BaseEntity::getId)
                 .collect(Collectors.toSet());
     }
 
     public Set<Integer> convertDTOsToIDs(Set<Dto> dtos) {
         return dtos.stream()
-                .map(dto -> dto.getId())
+                .map(BaseDto::getId)
                 .collect(Collectors.toSet());
     }
 
     public Set<Dto> convertModelsToDtos(Collection<Model> models) {
         return models.stream()
-                .map(model -> convertModelToDto(model))
+                .map(this::convertModelToDto)
                 .collect(Collectors.toSet());
     }
 }
