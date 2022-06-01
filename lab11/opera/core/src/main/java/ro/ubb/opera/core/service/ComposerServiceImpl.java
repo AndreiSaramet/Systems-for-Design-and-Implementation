@@ -10,18 +10,15 @@ import ro.ubb.opera.core.model.validators.Validator;
 import ro.ubb.opera.core.repository.Repository;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class ComposerServiceImpl implements ComposerService {
-
     private final Validator<Composer> composerValidator;
 
     @Autowired
     private final Repository<Integer, Composer> composerRepository;
-
 
     public ComposerServiceImpl(Repository<Integer, Composer> composerRepository) {
         this.composerValidator = new ComposerValidator();
@@ -42,11 +39,7 @@ public class ComposerServiceImpl implements ComposerService {
 
     @Override
     public Composer findComposerByName(String name) {
-        List<Composer> composerSet = this.composerRepository.findAll().stream().filter(composer -> composer.getName().equals(name)).collect(Collectors.toList());
-        if (composerSet.isEmpty()) {
-            return null;
-        }
-        return composerSet.get(0);
+        return this.composerRepository.findAll().stream().filter(composer -> composer.getName().equals(name)).findFirst().orElse(null);
     }
 
     @Override

@@ -2,6 +2,7 @@ package ro.ubb.opera.core.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ro.ubb.opera.core.model.Opera;
 import ro.ubb.opera.core.model.validators.OperaValidator;
@@ -9,10 +10,10 @@ import ro.ubb.opera.core.model.validators.Validator;
 import ro.ubb.opera.core.repository.Repository;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Service
 public class OperaServiceImpl implements OperaService {
     private final Validator<Opera> operaValidator;
 
@@ -38,11 +39,7 @@ public class OperaServiceImpl implements OperaService {
 
     @Override
     public Opera findOperaByTitle(String title) {
-        List<Opera> operaSet = this.operaRepository.findAll().stream().filter(opera -> opera.getTitle().equals(title)).collect(Collectors.toList());
-        if (operaSet.isEmpty()) {
-            return null;
-        }
-        return operaSet.get(0);
+        return this.operaRepository.findAll().stream().filter(opera -> opera.getTitle().equals(title)).findFirst().orElse(null);
     }
 
     @Override

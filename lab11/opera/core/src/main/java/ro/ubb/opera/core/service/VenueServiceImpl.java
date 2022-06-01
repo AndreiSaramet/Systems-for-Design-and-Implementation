@@ -1,80 +1,73 @@
 package ro.ubb.opera.core.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ro.ubb.opera.core.model.Venue;
 import ro.ubb.opera.core.model.validators.Validator;
+import ro.ubb.opera.core.model.validators.VenueValidator;
 import ro.ubb.opera.core.repository.Repository;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
+@Service
 public class VenueServiceImpl implements VenueService {
-    private final ExecutorService executorService;
-
     private final Validator<Venue> venueValidator;
 
+    @Autowired
     private final Repository<Integer, Venue> venueRepository;
 
-    public VenueServiceImpl(ExecutorService executorService, Validator<Venue> venueValidator, Repository<Integer, Venue> venueRepository) {
-        this.executorService = executorService;
-        this.venueValidator = venueValidator;
+    public VenueServiceImpl(Repository<Integer, Venue> venueRepository) {
+        this.venueValidator = new VenueValidator();
         this.venueRepository = venueRepository;
     }
 
     @Override
-    public Future<Venue> addVenue(Integer seatsNo, Integer floor) {
-        return this.executorService.submit(() -> {
-            Venue venue = new Venue(-1, seatsNo, floor);
-            this.venueValidator.validate(venue);
-            return this.venueRepository.save(venue).orElse(null);
-        });
+    public Venue addVenue(Integer seatsNo, Integer floor) {
+        Venue venue = new Venue(-1, seatsNo, floor);
+        this.venueValidator.validate(venue);
+        return this.venueRepository.save(venue);
     }
 
     @Override
-    public Future<Venue> findVenueById(Integer id) {
-        return this.executorService.submit(() -> this.venueRepository.findOne(id).orElse(null));
+    public Venue findVenueById(Integer id) {
+        return this.venueRepository.findById(id).orElse(null);
     }
 
     @Override
-    public Future<Set<Venue>> findVenuesBySeatsNo(Integer seatsNo) {
-        return this.executorService.submit(() -> {
-            Set<Venue> venueSet = new HashSet<>();
-            this.venueRepository.findAll().forEach(venueSet::add);
-            return venueSet.stream().filter(venue -> venue.getNumberOfSeats().equals(seatsNo)).collect(Collectors.toSet());
-        });
+    public Set<Venue> findVenuesBySeatsNo(Integer seatsNo) {
+        return this.venueRepository.findAll().stream().filter(venue -> venue.getNumberOfSeats().equals(seatsNo)).collect(Collectors.toSet());
     }
 
     @Override
-    public Future<Set<Venue>> findVenuesByFloor(Integer floor) {
-        return this.executorService.submit(() -> {
-            Set<Venue> venueSet = new HashSet<>();
-            this.venueRepository.findAll().forEach(venueSet::add);
-            return venueSet.stream().filter(venue -> venue.getFloor().equals(floor)).collect(Collectors.toSet());
-        });
+    public Set<Venue> findVenuesByFloor(Integer floor) {
+        return this.venueRepository.findAll().stream().filter(venue -> venue.getFloor().equals(floor)).collect(Collectors.toSet());
     }
 
     @Override
-    public Future<Set<Venue>> getAllVenues() {
-        return this.executorService.submit(() -> {
-            Set<Venue> venueSet = new HashSet<>();
-            this.venueRepository.findAll().forEach(venueSet::add);
-            return venueSet;
-        });
+    public Set<Venue> getAllVenues() {
+        return new HashSet<>(this.venueRepository.findAll());
     }
 
     @Override
-    public Future<Venue> updateVenue(Integer id, Integer seatsNo, Integer floor) {
-        return this.executorService.submit(() -> {
-            Venue venue = new Venue(id, seatsNo, floor);
-            this.venueValidator.validate(venue);
-            return this.venueRepository.update(venue).orElse(null);
-        });
+    @Transactional
+    public Venue updateVenue(Integer id, Integer seatsNo, Integer floor) {
+        Venue venue = this.venueRepository.findById(id).orElse(null);
+        if (venue == null) {
+            return null;
+        }
+        venue.setNumberOfSeats(seatsNo);
+        venue.setFloor(floor);
+        this.venueValidator.validate(venue);
+        return venue;
     }
 
     @Override
-    public Future<Venue> deleteVenue(Integer id) {
-        return this.executorService.submit(() -> this.venueRepository.delete(id).orElse(null));
+    public Venue deleteVenue(Integer id) {
+        Venue venue = this.venueRepository.findById(id).orElse(null);
+        this.venueRepository.deleteById(id);
+        return venue;
     }
 }
