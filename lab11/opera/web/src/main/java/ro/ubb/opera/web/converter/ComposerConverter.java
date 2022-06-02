@@ -18,6 +18,9 @@ public class ComposerConverter extends BaseConverter<Composer, ComposerDto> {
 
     @Override
     public ComposerDto convertModelToDto(Composer composer) {
+        if (composer == null) {
+            return null;
+        }
         ComposerDto composerDto = new ComposerDto(composer.getName(), composer.getNationality(), composer.getMusicalPeriod());
         composerDto.setId(composer.getId());
         return composerDto;

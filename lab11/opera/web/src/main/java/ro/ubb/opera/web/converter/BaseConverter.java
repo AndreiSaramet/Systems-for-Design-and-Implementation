@@ -4,6 +4,7 @@ import ro.ubb.opera.core.model.BaseEntity;
 import ro.ubb.opera.web.dto.BaseDto;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,5 +26,11 @@ public abstract class BaseConverter<Model extends BaseEntity<Integer>, Dto exten
         return models.stream()
                 .map(this::convertModelToDto)
                 .collect(Collectors.toSet());
+    }
+
+    public List<Dto> convertModelsToDtosOrdered(List<Model> models) {
+        return models.stream()
+                .map(this::convertModelToDto)
+                .collect(Collectors.toList());
     }
 }
