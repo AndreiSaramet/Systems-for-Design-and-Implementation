@@ -1,6 +1,7 @@
 package ro.ubb.opera.core.model;
 
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
@@ -10,7 +11,7 @@ import java.util.Objects;
 public class BaseEntity<ID extends Serializable> implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private ID id;
 
     public BaseEntity() {
